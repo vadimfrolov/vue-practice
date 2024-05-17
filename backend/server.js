@@ -2,12 +2,31 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 
-// Enable CORS for all routes
 app.use(cors());
 
 app.get('/api/data', (req, res) => {
-  res.sendFile(__dirname + '/data.json');
+  const dataFilePath = path.join(__dirname, 'data.json');
+  fs.readFile(dataFilePath, 'utf8', (err, data) => {
+    if (err) {
+      res.status(500).send('Error reading data file');
+      return;
+    }
+    const jsonData = JSON.parse(data);
+    const { filter } = req.query;
+    let filteredMachines = jsonData.machines;
+
+    if (filter === 'active') {
+      filteredMachines = jsonData.machines.filter(machine => machine.active);
+    }
+
+    res.json({
+      message: jsonData.message,
+      machines: filteredMachines
+    });
+  });
 });
 
 app.listen(port, () => {
