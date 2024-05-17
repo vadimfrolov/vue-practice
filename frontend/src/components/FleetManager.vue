@@ -122,6 +122,5 @@ h1 {
 }
 .details {
   padding: 10px;
-  width: 300px;
 }
 </style>
