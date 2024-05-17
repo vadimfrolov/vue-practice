@@ -23,7 +23,6 @@ app.get('/api/data', (req, res) => {
     }
 
     res.json({
-      message: jsonData.message,
       machines: filteredMachines
     });
   });
